@@ -1,46 +1,19 @@
-# #!/bin/bash
-
-# display_help() {
-#     echo "Usage: devopsfetch [option] [argument]"
-#     echo
-#     echo "   -p, --port [port_number]      Display active ports"
-#     echo "   -d, --docker [container_name] Display Docker information"
-#     echo "   -n, --nginx [domain]          Display Nginx information"
-#     echo "   -u, --users [username]        Display user information"
-#     echo "   -t, --time [start] [end]      Display activities within time range"
-#     echo "   -h, --help                    Display help"
-#     echo
-# }
-
-# case $1 in
-#     -p|--port)
-#         devopsfetch_ports $2
-#         ;;
-#     -d|--docker)
-#         devopsfetch_docker $2
-#         ;;
-#     -n|--nginx)
-#         devopsfetch_nginx $2
-#         ;;
-#     -u|--users)
-#         devopsfetch_users $2
-#         ;;
-#     -t|--time)
-#         devopsfetch_time $2 $3
-#         ;;
-#     -h|--help)
-#         display_help
-#         ;;
-#     *)
-#         echo "Invalid option"
-#         display_help
-#         ;;
-# esac
-
-
 #!/bin/bash
 
+LOG_FILE="/var/log/devopsfetch.log"
+
+# Create log file if it doesn't exist
+if [ ! -f "$LOG_FILE" ]; then
+    sudo touch "$LOG_FILE"
+    sudo chmod 666 "$LOG_FILE"
+fi
+
+log() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | sudo tee -a "$LOG_FILE" > /dev/null
+}
+
 display_help() {
+    log "Displaying help information"
     echo "Usage: devopsfetch [option] [argument]"
     echo
     echo "   -p, --port [port_number]      Display active ports"
@@ -53,65 +26,69 @@ display_help() {
 }
 
 fetch_ports() {
-    if [[ -z $1 ]]; then
-        sudo netstat -tuln
+    log "Fetching ports with argument: $1"
+    if [ -z "$1" ]; then
+        sudo netstat -tuln | sudo tee -a "$LOG_FILE"
     else
-        sudo netstat -tuln | grep ":$1"
+        sudo netstat -tuln | grep ":$1" | sudo tee -a "$LOG_FILE"
     fi
 }
 
 fetch_docker() {
-    if [[ -z $1 ]]; then
-        docker ps -a
+    log "Fetching Docker information for: $1"
+    if [ -z "$1" ]; then
+        docker ps -a | sudo tee -a "$LOG_FILE"
     else
-        docker inspect $1
+        docker inspect "$1" | sudo tee -a "$LOG_FILE"
     fi
 }
 
 fetch_nginx() {
-    if [[ -z $1 ]]; then
-        sudo nginx -T
+    log "Fetching Nginx information for domain: $1"
+    if [ -z "$1" ]; then
+        sudo nginx -T | sudo tee -a "$LOG_FILE"
     else
-        sudo nginx -T | grep -A 10 "server_name $1"
+        sudo nginx -T | grep -A 10 "server_name $1" | sudo tee -a "$LOG_FILE"
     fi
 }
 
 fetch_users() {
-    if [[ -z $1 ]]; then
-        lastlog
+    log "Fetching user information for: $1"
+    if [ -z "$1" ]; then
+        lastlog | sudo tee -a "$LOG_FILE"
     else
-        lastlog | grep $1
+        lastlog | grep "$1" | sudo tee -a "$LOG_FILE"
     fi
 }
 
 fetch_time_range() {
-    journalctl --since="$1" --until="$2"
+    log "Fetching logs from $1 to $2"
+    journalctl --since="$1" --until="$2" | sudo tee -a "$LOG_FILE"
 }
 
-case $1 in
+case "$1" in
     -p|--port)
-        fetch_ports $2
+        fetch_ports "$2"
         ;;
     -d|--docker)
-        fetch_docker $2
+        fetch_docker "$2"
         ;;
     -n|--nginx)
-        fetch_nginx $2
+        fetch_nginx "$2"
         ;;
     -u|--users)
-        fetch_users $2
+        fetch_users "$2"
         ;;
     -t|--time)
-        fetch_time_range $2 $3
+        fetch_time_range "$2" "$3"
         ;;
     -h|--help)
         display_help
         ;;
     *)
+        log "Invalid option provided: $1"
         echo "Invalid option"
         display_help
         ;;
 esac
-
-
 
