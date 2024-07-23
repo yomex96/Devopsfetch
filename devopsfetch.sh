@@ -43,14 +43,29 @@ fetch_docker() {
     fi
 }
 
-fetch_nginx() {
-    log "Fetching Nginx information for domain: $1"
-    if [ -z "$1" ]; then
-        sudo nginx -T | sudo tee -a "$LOG_FILE"
+
+
+
+
+fetch_nginx_info() {
+    domain=$1
+
+    if [[ -z $domain ]]; then
+        # Display all Nginx domains and their ports in a tabular format
+        echo -e "Domain\tPort"
+        nginx -T 2>/dev/null | grep -E "server_name|listen" | \
+        sed 'N;s/\n/ /' | \
+        sed 's/server_name //g; s/listen //g; s/;//g' | \
+        column -t
     else
-        sudo nginx -T | grep -A 10 "server_name $1" | sudo tee -a "$LOG_FILE"
+        # Provide detailed configuration information for a specific domain
+        echo "Detailed configuration for domain: $domain"
+        sudo grep -A 20 "server_name $domain" /etc/nginx/sites-available/* /etc/nginx/nginx.conf
     fi
 }
+
+
+
 
 fetch_users() {
     log "Fetching user information for: $1"
@@ -74,7 +89,7 @@ case "$1" in
         fetch_docker "$2"
         ;;
     -n|--nginx)
-        fetch_nginx "$2"
+	 fetch_nginx_info $2
         ;;
     -u|--users)
         fetch_users "$2"
