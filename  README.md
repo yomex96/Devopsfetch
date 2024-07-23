@@ -6,7 +6,7 @@
 
 ### Features
 
-1. **Ports
+1. **Ports**
    - Display all active ports and services.
    - Provide detailed information about a specific port.
 2. **Docker**
