@@ -27,7 +27,7 @@ To install `devopsfetch`, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yomex96/devopsfetch.git
+    git clone https://github.com/yomex96/Devopsfetch_stage5.git
     cd devopsfetch
     ```
 
