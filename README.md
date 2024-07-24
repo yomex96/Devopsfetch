@@ -109,7 +109,11 @@ The installation script will:
 
 9. Display activities within a specified time range:
     ```sh
-    devopsfetch -t "2024-07-01 00:00:00" "2024-07-01 23:59:59"
+    ./devopsfetch.sh -t "2024-07-01 00:00:00" "2024-07-01 23:59:59"
+    ```
+10. Display help information:
+    ```sh
+    ./devopsfetch.sh -h
     ```
 
 ## Continuous Monitoring
@@ -126,6 +130,10 @@ The installation script will:
 2. Start the service:
     ```sh
     sudo systemctl start devopsfetch.service
+    ```
+3.Status of  the service:
+    ```sh
+    sudo systemctl status devopsfetch.service
     ```
 
 ### Logs
@@ -157,7 +165,7 @@ To uninstall `devopsfetch` and remove the systemd service:
     ```sh
     sudo rm -r /path/to/devopsfetch
     ```
-
+Read more by clicking this  [link]https://docs.google.com/document/d/16qrg02QZyhz7ttEEmrYoIR4yUTBM9bTR2828F_jIWCo/edit?usp=sharing for further implementation guide and usage.
 ## Contributing
 
 If you would like to contribute to `devopsfetch`, please fork the repository and submit a pull request.
