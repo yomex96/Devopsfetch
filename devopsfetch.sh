@@ -26,14 +26,17 @@ display_help() {
 }
 
 fetch_ports() {
-    log "Fetching ports with argument: $1"
-    if [ -z "$1" ]; then
-        sudo netstat -tuln | sudo tee -a "$LOG_FILE"
+    local port=$1
+    log "Fetching ports with argument: $port"
+
+    if [ -z "$port" ]; then
+        # Display all ports and services
+        sudo netstat -tuln | sudo tee -a "$LOG_FILE" 
     else
-        sudo netstat -tuln | grep ":$1" | sudo tee -a "$LOG_FILE"
+        # Display ports filtered by specific port number
+        sudo netstat -tuln | grep ":$port" | sudo tee -a "$LOG_FILE" > /dev/null
     fi
 }
-
 fetch_docker() {
     log "Fetching Docker information for: $1"
     if [ -z "$1" ]; then
@@ -52,18 +55,21 @@ fetch_nginx_info() {
 
     if [[ -z $domain ]]; then
         # Display all Nginx domains and their ports in a tabular format
-        echo -e "Domain\tPort"
-        nginx -T 2>/dev/null | grep -E "server_name|listen" | \
-        sed 'N;s/\n/ /' | \
-        sed 's/server_name //g; s/listen //g; s/;//g' | \
-        column -t
+        {
+            echo -e "Domain\tPort"
+            nginx -T 2>/dev/null | grep -E "server_name|listen" | \
+            sed 'N;s/\n/ /' | \
+            sed 's/server_name //g; s/listen //g; s/;//g' | \
+            column -t
+        } | sudo tee -a "$LOG_FILE"
     else
         # Provide detailed configuration information for a specific domain
-        echo "Detailed configuration for domain: $domain"
-        sudo grep -A 20 "server_name $domain" /etc/nginx/sites-available/* /etc/nginx/nginx.conf
+        {
+            echo "Detailed configuration for domain: $domain"
+            sudo grep -A 20 "server_name $domain" /etc/nginx/sites-available/* /etc/nginx/nginx.conf
+        } | sudo tee -a "$LOG_FILE"
     fi
 }
-
 
 
 
