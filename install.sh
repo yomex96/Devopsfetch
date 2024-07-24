@@ -10,7 +10,7 @@ sudo chmod +x /usr/local/bin/devopsfetch
 
 
 # Setup systemd service
-sudo cp systemd/devopsfetch.service /etc/systemd/system/
+sudo cp devopsfetch.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable devopsfetch.service
 sudo systemctl start devopsfetch.service
