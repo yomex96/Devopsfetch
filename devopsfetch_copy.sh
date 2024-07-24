@@ -60,7 +60,7 @@ fetch_nginx_info() {
             column -t
         } | sudo tee -a "$LOG_FILE"
     else
- # Provide detailed configuration information for a specific domain
+        # Provide detailed configuration information for a specific domain
         {
             echo "Detailed configuration for domain: $domain"
             sudo grep -A 20 "server_name $domain" /etc/nginx/sites-available/* /etc/nginx/nginx.conf
@@ -100,6 +100,7 @@ while true; do
             fetch_time_range "$2" "$3"
             ;;
         -h|--help)
+            display_help
             ;;
         *)
             log "Invalid option provided: $1"
@@ -111,3 +112,4 @@ while true; do
     # Sleep for a specified interval before running again (e.g., 60 seconds)
     sleep 60
 done
+
