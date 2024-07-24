@@ -165,14 +165,11 @@ To uninstall `devopsfetch` and remove the systemd service:
     ```sh
     sudo rm -r /path/to/devopsfetch
     ```
-Read more by clicking this  [link]https://docs.google.com/document/d/16qrg02QZyhz7ttEEmrYoIR4yUTBM9bTR2828F_jIWCo/edit?usp=sharing for further implementation guide and usage.
+For further Details click thishttps://docs.google.com/document/d/16qrg02QZyhz7ttEEmrYoIR4yUTBM9bTR2828F_jIWCo/edit?usp=sharing for concise  implementation guide and usage.
 ## Contributing
 
 If you would like to contribute to `devopsfetch`, please fork the repository and submit a pull request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Auhtor
 Abayomi Robert Onawole
