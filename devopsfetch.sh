@@ -28,7 +28,8 @@ display_help() {
 fetch_ports() {
     local port=$1
     log "Fetching ports with argument: $port"
-     if [ -z "$port" ]; then
+    
+    if [ -z "$port" ]; then
         # Display all ports and services
         log "Displaying all ports and services:"
         if command -v netstat > /dev/null; then
@@ -37,15 +38,26 @@ fetch_ports() {
             log "netstat command not found, trying ss instead"
             sudo ss -tuln | sudo tee -a "$LOG_FILE"
         fi
-
     else
         # Display ports filtered by specific port number
         log "Displaying ports filtered by specific port number: $port"
         if command -v netstat > /dev/null; then
-            sudo netstat -tuln | grep ":$port" | awk 'NR==1{print "Proto Recv-Q Send-Q Local Address Foreign Address State"} {print}' | column -t | sudo tee -a "$LOG_FILE"
+            port_info=$(sudo netstat -tuln | grep ":$port")
+            if [ -z "$port_info" ]; then
+                log "Port $port is not available."
+                echo "Port $port is not available." | sudo tee -a "$LOG_FILE"
+            else
+                echo "$port_info" | awk 'NR==1{print "Proto Recv-Q Send-Q Local Address Foreign Address State"} {print}' | column -t | sudo tee -a "$LOG_FILE"
+            fi
         else
             log "netstat command not found, trying ss instead"
-            sudo ss -tuln | grep ":$port" | awk 'NR==1{print "Proto Recv-Q Send-Q Local Address Foreign Address State"} {print}' | column -t | sudo tee -a "$LOG_FILE"
+            port_info=$(sudo ss -tuln | grep ":$port")
+            if [ -z "$port_info" ]; then
+                log "Port $port is not available."
+                echo "Port $port is not available." | sudo tee -a "$LOG_FILE"
+            else
+                echo "$port_info" | awk 'NR==1{print "Proto Recv-Q Send-Q Local Address Foreign Address State"} {print}' | column -t | sudo tee -a "$LOG_FILE"
+            fi
         fi
     fi
 }
