@@ -74,7 +74,7 @@ The installation script will:
 
 2. Get details of a specific port (e.g., port 8080):
     ```sh
-    ./devopsfetch.sh -p 8080
+    ./devopsfetch.sh -p 22
     ```
 
 3. List all Docker images and containers:
