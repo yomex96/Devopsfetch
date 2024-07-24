@@ -69,42 +69,42 @@ The installation script will:
 
 1. Display all active ports:
     ```sh
-    devopsfetch -p
+    ./devopsfetch.sh -p
     ```
 
 2. Get details of a specific port (e.g., port 8080):
     ```sh
-    devopsfetch -p 8080
+    ./devopsfetch.sh -p 8080
     ```
 
 3. List all Docker images and containers:
     ```sh
-    devopsfetch -d
+    ./devopsfetch.sh -d
     ```
 
 4. Get details of a specific Docker container (e.g., container_name):
     ```sh
-    devopsfetch -d container_name
+    ./devopsfetch.sh -d container_name
     ```
 
 5. Display all Nginx domains and their ports:
     ```sh
-    devopsfetch -n
+    ./devopsfetch.sh -n
     ```
 
 6. Get details of a specific Nginx domain (e.g., domain.com):
     ```sh
-    devopsfetch -n domain.com
+    ./devopsfetch.sh -n domain.com
     ```
 
 7. List all users and their last login times:
     ```sh
-    devopsfetch -u
+    ./devopsfetch.sh -u
     ```
 
 8. Get details of a specific user (e.g., username):
     ```sh
-    devopsfetch -u username
+    ./devopsfetch.sh -u username
     ```
 
 9. Display activities within a specified time range:
@@ -131,7 +131,7 @@ The installation script will:
     ```sh
     sudo systemctl start devopsfetch.service
     ```
-3.Status of  the service:
+3. Status of  the service:
     ```sh
     sudo systemctl status devopsfetch.service
     ```
